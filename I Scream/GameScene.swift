@@ -15,7 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var screenWidth = CGFloat(0)
     var lastTime: TimeInterval?
     var cannon: SKSpriteNode?
-    var cannonAngle = CGFloat(M_PI/2)
+    var cannonAngle = CGFloat.pi/2
     var cannonDestX = CGFloat(0)
     var movingCannon = false
     var rotatingCannon = false
@@ -59,23 +59,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
     
-        cannon = SKSpriteNode(imageNamed: "IceCreamCannon2")
+        cannon = SKSpriteNode(imageNamed: "IceCreamCannon")
         cannon?.size = CGSize(width: 64, height: 210)
         //cannon?.position = CGPoint(x: 0, y: 0)
         cannon?.zPosition = 2
         cannon?.position = CGPoint(x: 0, y: -screenHeight/2)
         self.addChild(cannon!)
+        
+        makeEnemy()
     }
     
     func fireIceCream(){
         //let iceCream = SKSpriteNode(imageNamed: "IceCreamProjectile")
         //iceCream.size = CGSize(width: 48, height: 105)
-        var cannonCurrAngle = cannon!.zRotation+CGFloat(M_PI/2)
-        let iceCream = SKSpriteNode(imageNamed: "IceCreamProjectile2")
+        let cannonCurrAngle = cannon!.zRotation+CGFloat.pi/2
+        let iceCream = IceCreamNode("IceCreamProjectile", 1)
         iceCream.size = CGSize(width: 64, height: 66)
         iceCream.position = CGPoint(x: (cannon?.position.x)!+90*cos(cannonCurrAngle), y: (cannon?.position.y)!+90*sin(cannonCurrAngle))
         iceCream.zPosition = 1
-        iceCream.zRotation = cannonCurrAngle-CGFloat(M_PI/2)
+        iceCream.zRotation = cannonCurrAngle-CGFloat.pi/2
         iceCream.run(SKAction.fadeOut(withDuration: 4.5))
         iceCream.run(SKAction.sequence([SKAction.wait(forDuration: 4), SKAction.run({
             iceCream.removeFromParent()
@@ -84,7 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
         let iceCreamPhysicsBody = SKPhysicsBody(circleOfRadius: iceCream.size.width/2)
         iceCreamPhysicsBody.collisionBitMask = 1
-        iceCreamPhysicsBody.contactTestBitMask = 1
+        iceCreamPhysicsBody.contactTestBitMask = 1 | 4
         iceCreamPhysicsBody.categoryBitMask = 2
         iceCreamPhysicsBody.friction = 0
         iceCreamPhysicsBody.restitution = 1
@@ -109,17 +111,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondBody = contact.bodyA;
         }
         if(firstBody?.categoryBitMask == 1){
-            print("ICE CREAM HIT WALL!")
-            let iceCream = (secondBody?.node)!
-            let iceCreamAngle = iceCream.zRotation+CGFloat(M_PI)/2
+            let iceCream = secondBody?.node as! IceCreamNode
+            let iceCreamAngle = iceCream.zRotation+CGFloat.pi/2
             //if(iceCreamAngle > CGFloat(0)){
-                iceCream.run(SKAction.rotate(toAngle: CGFloat(M_PI/2)-iceCreamAngle, duration: 0))
+                iceCream.run(SKAction.rotate(toAngle: CGFloat.pi/2-iceCreamAngle, duration: 0))
+                iceCream.setDamagePoints(iceCream.getDamagePoints()*2)
             //}
             //else{
             //    iceCream.run(SKAction.rotate(toAngle: iceCreamAngle+CGFloat(M_PI/2), duration: 0))
             //}
             //iceCream.removeFromParent()
         }
+        else{
+            let iceCream = firstBody?.node as! IceCreamNode
+            //iceCream.removeAllActions()
+            let enemy = secondBody?.node?.parent as! MonsterNode
+            enemy.removeAction(forKey: "damaged")
+            if(!iceCream.isHidden){
+                iceCream.removeFromParent()
+                iceCream.isHidden = true
+                enemy.decreaseHealth(iceCream.getDamagePoints())
+            }
+            enemy.run(SKAction.sequence([SKAction.fadeAlpha(to: 0.6, duration: 0.0), SKAction.wait(forDuration: 0.1), SKAction.fadeAlpha(to: 1, duration: 0.0)]), withKey: "damaged")
+        }
+    }
+    
+    func makeEnemy(){
+        let enemy = MonsterNode(100)
+        enemy.position = CGPoint(x: 0, y: 0)
+        self.addChild(enemy)
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -131,7 +151,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         touchNum += 1
         if(oneTouch){
-        if(pos.x > (cannon?.position.x)!-105 && pos.x < (cannon?.position.x)!+105 && pos.y < -screenHeight/2+105){
+        if(pos.x > (cannon?.position.x)!-105 && pos.x < (cannon?.position.x)!+105 && pos.y < -screenHeight/2+155){
             movingCannon = true
         }
         else{
@@ -142,7 +162,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 cannonAngle = atan(dy/dx)
             }
             else{
-                cannonAngle = CGFloat(M_PI)+atan(dy/dx)
+                cannonAngle = CGFloat.pi+atan(dy/dx)
             }
             //cannon?.removeAction(forKey: "rotate")
             //cannon?.run(SKAction.sequence([SKAction.run({self.rotatingCannon = true}), SKAction.rotate(toAngle: cannonAngle-CGFloat(M_PI/2), duration: 0.3), SKAction.run({self.rotatingCannon = false})]), withKey: "rotate")
@@ -162,7 +182,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let dy = pos.y+self.frame.height/2
                 cannonAngle = atan(dy/dx)
                 if(dx < 0){
-                    cannonAngle = CGFloat(M_PI)+atan(dy/dx)
+                    cannonAngle = CGFloat.pi+atan(dy/dx)
 
                 }
                 //if(abs(newCannonAngle-cannonAngle) < CGFloat(M_PI/8)){
@@ -202,20 +222,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func update(_ currentTime: TimeInterval) {
-        var cannonCurrAngle = (cannon?.zRotation)!+CGFloat(M_PI/2)
+        let cannonCurrAngle = (cannon?.zRotation)!+CGFloat.pi/2
         var angleDiff = CGFloat(0)
-        if(abs(cannonCurrAngle-cannonAngle) > CGFloat(M_PI/180)){
-            angleDiff += CGFloat(M_PI/180)
+        if(abs(cannonCurrAngle-cannonAngle) > CGFloat.pi/180){
+            angleDiff += CGFloat.pi/180
         }
-        if(abs(cannonCurrAngle-cannonAngle) > CGFloat(M_PI/16)){
-            angleDiff += CGFloat(M_PI/180)*2
+        if(abs(cannonCurrAngle-cannonAngle) > CGFloat.pi/16){
+            angleDiff += CGFloat.pi/180*2
         
         }
-        if(abs(cannonCurrAngle-cannonAngle) > CGFloat(M_PI/8)){
-            angleDiff += CGFloat(M_PI/180)*3
+        if(abs(cannonCurrAngle-cannonAngle) > CGFloat.pi/8){
+            angleDiff += CGFloat.pi/180*3
         }
-        if(abs(cannonCurrAngle-cannonAngle) > CGFloat(M_PI/4)){
-            angleDiff += CGFloat(M_PI/180)*4
+        if(abs(cannonCurrAngle-cannonAngle) > CGFloat.pi/4){
+            angleDiff += CGFloat.pi/180*4
         }
         if(cannonCurrAngle > cannonAngle){
             cannon?.run(SKAction.rotate(byAngle: -CGFloat(angleDiff), duration: 0), withKey: "rotate")
@@ -224,7 +244,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             cannon?.run(SKAction.rotate(byAngle: CGFloat(angleDiff), duration: 0), withKey: "rotate")
         }
         
-        var cannonCurrX = cannon?.position.x
+        let cannonCurrX = cannon?.position.x
         var xDiff = CGFloat(0)
         if(abs(cannonCurrX!-cannonDestX) > 2){
             xDiff += 2

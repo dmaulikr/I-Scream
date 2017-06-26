@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B4A84211EFDD99900285C37 /* MonsterNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4A84201EFDD99900285C37 /* MonsterNode.swift */; };
+		2B4A84231EFF6BF300285C37 /* IceCreamNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4A84221EFF6BF300285C37 /* IceCreamNode.swift */; };
 		2B5EBB601EF9C6DC00337213 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5EBB5F1EF9C6DC00337213 /* AppDelegate.swift */; };
 		2B5EBB621EF9C6DC00337213 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2B5EBB611EF9C6DC00337213 /* GameScene.sks */; };
 		2B5EBB641EF9C6DC00337213 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2B5EBB631EF9C6DC00337213 /* Actions.sks */; };
@@ -37,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2B4A84201EFDD99900285C37 /* MonsterNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonsterNode.swift; sourceTree = "<group>"; };
+		2B4A84221EFF6BF300285C37 /* IceCreamNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IceCreamNode.swift; sourceTree = "<group>"; };
 		2B5EBB5C1EF9C6DC00337213 /* I Scream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "I Scream.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B5EBB5F1EF9C6DC00337213 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B5EBB611EF9C6DC00337213 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 			children = (
 				2B5EBB5F1EF9C6DC00337213 /* AppDelegate.swift */,
 				2B5EBB611EF9C6DC00337213 /* GameScene.sks */,
+				2B4A84201EFDD99900285C37 /* MonsterNode.swift */,
+				2B4A84221EFF6BF300285C37 /* IceCreamNode.swift */,
 				2B5EBB631EF9C6DC00337213 /* Actions.sks */,
 				2B5EBB651EF9C6DC00337213 /* GameScene.swift */,
 				2B5EBB671EF9C6DC00337213 /* GameViewController.swift */,
@@ -275,6 +281,8 @@
 			files = (
 				2B5EBB661EF9C6DC00337213 /* GameScene.swift in Sources */,
 				2B5EBB681EF9C6DC00337213 /* GameViewController.swift in Sources */,
+				2B4A84211EFDD99900285C37 /* MonsterNode.swift in Sources */,
+				2B4A84231EFF6BF300285C37 /* IceCreamNode.swift in Sources */,
 				2B5EBB601EF9C6DC00337213 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -528,6 +536,7 @@
 				2B5EBB8C1EF9C6DC00337213 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2B5EBB8D1EF9C6DC00337213 /* Build configuration list for PBXNativeTarget "I ScreamTests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +545,7 @@
 				2B5EBB8F1EF9C6DC00337213 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2B5EBB901EF9C6DC00337213 /* Build configuration list for PBXNativeTarget "I ScreamUITests" */ = {
 			isa = XCConfigurationList;
@@ -544,6 +554,7 @@
 				2B5EBB921EF9C6DC00337213 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
